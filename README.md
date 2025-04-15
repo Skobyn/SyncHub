@@ -18,17 +18,37 @@ GrocerySync Hub enables support technicians to efficiently configure, deploy, an
 - Extensible via plugin system for new POS and destination types
 
 ## Getting Started
-1. **Clone the repository** (URL to be added after repo initialization)
-2. **Directory Structure:**
-   - `hub-backend/` - Django backend API
-   - `hub-frontend/` - React frontend
+1. **Clone the repository** (https://github.com/Skobyn/SyncHub)
+2. **Backend Setup:**
+   - See `hub-backend/README.md` for Django backend setup instructions.
+3. **Directory Structure:**
+   - `hub-backend/` - Django backend API (initialized)
+   - `hub-frontend/` - Next.js frontend (React, TypeScript)
    - `agent/` - Go-based client agent
    - `plugins/` - POS and destination plugin implementations
    - `memory-bank/` - Project documentation and context
-3. **Setup instructions** for each component will be provided in their respective directories.
+4. **Setup instructions** for each component will be provided in their respective directories.
 
 ## Status
-- Project setup and documentation in progress. See `memory-bank/` for detailed context and planning.
+- Project setup and documentation in progress.
+- **Backend (Django) initialized in `hub-backend/`.**
+- **Initial models for Users, Retailers, Agents, Destinations, Jobs defined.**
+- **Custom user model configured and migrations applied.**
+- **Next: Implement authentication and API structure.**
+- See `memory-bank/` for detailed context and planning.
 
 ## License
-TBD 
+TBD
+
+## Development Workflow
+
+To run the project locally:
+
+1. **Start the backend (Django):**
+   - Navigate to `hub-backend/` and activate the virtual environment.
+   - Run `python manage.py runserver` (see `hub-backend/README.md` for details).
+2. **Start the frontend (Next.js):**
+   - Navigate to `hub-frontend/` and run `npm run dev`.
+   - The frontend will be available at [http://localhost:3000](http://localhost:3000).
+3. **API Communication:**
+   - The Next.js frontend is configured to communicate with the Django backend API (CORS is enabled for local development). 

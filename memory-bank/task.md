@@ -10,16 +10,16 @@ This file tracks the development tasks for the project.
 ## Phase 1: Core Infrastructure & MVP Setup (Backlog)
 
 ### Project Setup & Foundation
-- [ ] Set up Git repository.
-- [ ] Define initial project directory structure (Hub Backend, Hub Frontend, Agent, Plugins).
-- [ ] Choose and set up Hub backend framework/language (e.g., Python/Django).
-- [ ] Choose and set up Hub frontend framework/language (e.g., React/Vite).
+- [x] Set up Git repository.
+- [x] Define initial project directory structure (Hub Backend, Hub Frontend, Agent, Plugins).
+- [x] Choose and set up Hub backend framework/language (e.g., Python/Django).
+- [x] Choose and set up Hub frontend framework/language (Next.js/React/TypeScript).
 - [ ] Choose and set up Agent language/runtime (e.g., Go).
-- [ ] Design and implement initial database schema (e.g., PostgreSQL) including core tables for `Users`, `Retailers`, `Agents`, `Destinations`, `Jobs`. Ensure multi-tenancy (`retailer_id`).
+- [x] Design and implement initial database schema (e.g., PostgreSQL) including core tables for `Users`, `Retailers`, `Agents`, `Destinations`, `Jobs`. Ensure multi-tenancy (`retailer_id`).
 - [ ] Set up basic CI/CD pipeline placeholder.
 
 ### Central Hub - Backend API & Core Logic
-- [ ] Implement User Authentication/Authorization (Tech login, JWT/session handling).
+- [/] Implement authentication and core API endpoints for Users, Retailers, Agents, Destinations, and Jobs, enforcing RBAC and multi-tenancy as per PRD.
 - [ ] Implement basic RBAC (Admin, Tech roles).
 - [ ] Implement secure API endpoint for Agent registration (generates unique API Key/Secret per agent).
 - [ ] Implement secure API endpoint for Agent check-in & status reporting.
@@ -89,7 +89,12 @@ This file tracks the development tasks for the project.
 - ... (Tasks for NLP, advanced mapping, agent self-update) ...
 
 ## In Progress
-- [/] ... (Move tasks here as they are worked on) ...
+- [/] Implement authentication and core API endpoints for Users, Retailers, Agents, Destinations, and Jobs, enforcing RBAC and multi-tenancy as per PRD.
 
 ## Done
-- [x] ... (Move tasks here upon completion) ...
+- [x] Set up Git repository.
+- [x] Define initial project directory structure (Hub Backend, Hub Frontend, Agent, Plugins).
+- [x] Choose and set up Hub backend framework/language (e.g., Python/Django).
+- [x] Choose and set up Hub frontend framework/language (Next.js/React/TypeScript).
+- [x] Design and implement initial database schema (e.g., PostgreSQL) including core tables for `Users`, `Retailers`, `Agents`, `Destinations`, `Jobs`. Ensure multi-tenancy (`retailer_id`).
+- [x] Enable CORS in backend for frontend integration (local development).
