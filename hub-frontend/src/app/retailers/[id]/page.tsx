@@ -1,5 +1,3 @@
-import { useParams } from "next/navigation";
-
 export default function RetailerDetailPage() {
   // Placeholder for dynamic route param
   // In a real app, use router or fetch data based on ID
