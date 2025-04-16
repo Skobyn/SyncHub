@@ -1,6 +1,10 @@
 # Active Context: GrocerySync Hub - Support Edition
 
 ## Current Focus
+- Troubleshooting frontend deployment issues on Vercel.
+- Backend and frontend codebases are structured for cloud deployment (previously on Cloud Run, now aiming for Vercel for frontend).
+- Backend API (Django) is assumed functional, focus is on frontend build/deployment.
+- **Latest deployment attempt failed due to ESLint errors in `pages/api/auth/[...nextauth].ts` and `components/RetailerList.tsx`.**
 - Backend and frontend codebases are now fully cloud-native and deployed via Google Cloud Run.
 - Automated CI/CD pipeline established using `cloudbuild.yaml` in the repo root.
 - All sensitive environment variables (Django secret key, DB password, Google OAuth credentials) are managed via Google Secret Manager and referenced in Cloud Build and Cloud Run.
@@ -24,11 +28,17 @@
 - **Project Memory Bank updated to reflect current status.**
 
 ## Recent Changes
-- Created and configured `cloudbuild.yaml` for automated Docker build and Cloud Run deployment.
-- Added and referenced all required secrets in Secret Manager.
-- Updated Cloud Run and Cloud Build service accounts with Secret Manager access.
-- Hardcoded all non-secret environment variables in the deployment pipeline.
-- Verified Cloud SQL and GCS integration.
+- Attempted to fix deployment failure caused by a large file (`node_modules/@next/swc-win32-x64-msvc/next-swc.win32-x64-msvc.node`) accidentally committed.
+    - Used `git filter-branch` to remove the file from the entire Git history.
+    - Force-pushed the rewritten history to the remote `main` branch.
+- Attempted to fix deployment failure caused by `Module not found: Can't resolve './globals.css'`.
+    - Corrected the import path in `hub-frontend/src/app/layout.tsx` from `"./globals.css"` to `"../../styles/globals.css"`.
+    - Committed and pushed the fix.
+- Created and configured `cloudbuild.yaml` for automated Docker build and Cloud Run deployment (backend previously).
+- Added and referenced all required secrets in Secret Manager (for previous Cloud Run setup).
+- Updated Cloud Run and Cloud Build service accounts with Secret Manager access (for previous Cloud Run setup).
+- Hardcoded all non-secret environment variables in the deployment pipeline (for previous Cloud Run setup).
+- Verified Cloud SQL and GCS integration (for previous Cloud Run setup).
 - Pushed all changes to GitHub for automated deployment.
 - Python virtual environment created in hub-backend/.
 - Django, Django REST Framework, and psycopg2-binary installed.
@@ -36,11 +46,12 @@
 - Documentation updated (hub-backend/README.md, root README.md).
 - Initial models and migrations complete.
 - Migrations created and applied.
-- **Created `cloudbuild.yaml` for Docker build and Cloud Run deployment.**
-- **Added `gunicorn` to `requirements.txt` to fix deployment.**
+- Created `cloudbuild.yaml` for Docker build and Cloud Run deployment.
+- Added `gunicorn` to `requirements.txt` to fix deployment.
 
 ## Immediate Next Steps
-- **Verify the deployed Cloud Run service is functioning correctly (check logs, basic requests).**
+- **Address the ESLint errors reported by the Vercel build process in `pages/api/auth/[...nextauth].ts` and `components/RetailerList.tsx`.**
+- Attempt frontend deployment again after fixing ESLint issues.
 - Continue implementation of authentication and core API endpoints for Users, Retailers, Agents, Destinations, and Jobs, with RBAC and multi-tenancy.
 - Update documentation and commit changes.
 

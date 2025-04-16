@@ -18,7 +18,9 @@
 - **All secrets (Django secret key, DB password, Google OAuth credentials) managed via Secret Manager and referenced in Cloud Build/Run.**
 - **All non-secret env vars hardcoded in cloudbuild.yaml for reliability.**
 - **Cloud SQL and GCS fully integrated.**
-- **Initial deployment to Cloud Run successful.**
+- **Backend initially deployed successfully to Cloud Run.**
+- **Successfully removed large file from Git history using `filter-branch`.**
+- **Corrected `globals.css` import path in frontend.**
 
 ## What's Left
 - Implement authentication and core API endpoints for Users, Retailers, Agents, Destinations, and Jobs, enforcing RBAC and multi-tenancy as per PRD.
@@ -29,9 +31,10 @@
 
 ## Overall Status
 - Project setup, backend initialization, and core models complete. DRF and API structure in place. 
-- **Backend deployed successfully to Cloud Run via Cloud Build.**
-- **Secrets and non-secrets managed according to best practices.**
+- **Backend infrastructure (Cloud Build, Cloud Run, Secrets, Cloud SQL, GCS) is configured and was previously working.**
+- **Frontend deployment to Vercel is the current focus and is blocked by ESLint errors.**
 - Ready to begin authentication and API development (per PRD requirements).
 
 ## Known Issues
-- None at this stage. 
+- None at this stage.
+- **Frontend build fails on Vercel due to ESLint errors (unused vars, explicit any types) in `pages/api/auth/[...nextauth].ts` and `components/RetailerList.tsx`.** 
