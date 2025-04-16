@@ -1,30 +1,56 @@
 steps:
+  # Build the container image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/synchub-backend', '.']
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/synchub-backend:$COMMIT_SHA', '.']
 
+  # Push the container image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/synchub-backend']
+    args: ['push', 'gcr.io/$PROJECT_ID/synchub-backend:$COMMIT_SHA']
 
+  # Run database migrations
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      [
+        'beta', 'run', 'jobs', 'execute', 'synchub-migrate-job-$COMMIT_SHA',
+        '--image', 'gcr.io/$PROJECT_ID/synchub-backend:$COMMIT_SHA',
+        '--tasks', '1',
+        '--task-timeout', '5m',
+        '--region', 'us-central1',
+        '--set-env-vars',
+        'DJANGO_SECRET_KEY=$(DJANGO_SECRET_KEY),GOOGLE_CLIENT_ID=$(GOOGLE_CLIENT_ID),GOOGLE_CLIENT_SECRET=$(GOOGLE_CLIENT_SECRET),DB_NAME=postgres,DB_USER=postgres,DB_PASSWORD=$(DB_PASSWORD),DB_HOST=/cloudsql/synchub-456918:us-central1:synchubsql,DB_PORT=5432,DJANGO_ALLOWED_HOSTS=synchub-cloudrun-834454980092.us-central1.run.app,USE_GCS=True,GS_BUCKET_NAME=synchub-bucket,GS_STATIC_BUCKET_NAME=synchub-bucket',
+        '--command', 'python',
+        '--args', 'manage.py,migrate,--noinput',
+        '--wait'
+      ]
+    secretEnv: ['DJANGO_SECRET_KEY', 'GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET', 'DB_PASSWORD']
+
+  # Deploy the service to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
       [
         'run', 'deploy', 'synchub-cloudrun',
-        '--image', 'gcr.io/$PROJECT_ID/synchub-backend',
+        '--image', 'gcr.io/$PROJECT_ID/synchub-backend:$COMMIT_SHA',
         '--region', 'us-central1',
         '--platform', 'managed',
         '--allow-unauthenticated',
+        '--add-cloudsql-instances', 'synchub-456918:us-central1:synchubsql',
+        '--update-secrets=DJANGO_SECRET_KEY=django_secret_key:latest,GOOGLE_CLIENT_ID=google_client_id:latest,GOOGLE_CLIENT_SECRET=google_client_secret:latest,DB_PASSWORD=db_password:latest',
         '--set-env-vars',
-        'DJANGO_SECRET_KEY=$(DJANGO_SECRET_KEY),GOOGLE_CLIENT_ID=$(GOOGLE_CLIENT_ID),GOOGLE_CLIENT_SECRET=$(GOOGLE_CLIENT_SECRET),DB_NAME=postgres,DB_USER=postgres,DB_PASSWORD=$(DB_PASSWORD),DB_HOST=/cloudsql/synchub-456918:us-central1:synchubsql,DB_PORT=5432,DJANGO_ALLOWED_HOSTS=synchub-cloudrun-834454980092.us-central1.run.app,USE_GCS=True,GS_BUCKET_NAME=synchub-bucket,GS_STATIC_BUCKET_NAME=synchub-bucket'
+        'DB_NAME=postgres,DB_USER=postgres,DB_HOST=/cloudsql/synchub-456918:us-central1:synchubsql,DB_PORT=5432,DJANGO_ALLOWED_HOSTS=synchub-cloudrun-834454980092.us-central1.run.app,USE_GCS=True,GS_BUCKET_NAME=synchub-bucket,GS_STATIC_BUCKET_NAME=synchub-bucket'
       ]
-    secretEnv: ['DJANGO_SECRET_KEY', 'GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET', 'DB_PASSWORD']
 
 secrets:
-- secretEnv:
-    DJANGO_SECRET_KEY: projects/$PROJECT_ID/secrets/django_secret_key/versions/latest
-    GOOGLE_CLIENT_ID: projects/$PROJECT_ID/secrets/google_client_id/versions/latest
-    GOOGLE_CLIENT_SECRET: projects/$PROJECT_ID/secrets/google_client_secret/versions/latest
-    DB_PASSWORD: projects/$PROJECT_ID/secrets/db_password/versions/latest
+- secretManager:
+  - secretName: django_secret_key
+    env: 'DJANGO_SECRET_KEY'
+  - secretName: google_client_id
+    env: 'GOOGLE_CLIENT_ID'
+  - secretName: google_client_secret
+    env: 'GOOGLE_CLIENT_SECRET'
+  - secretName: db_password
+    env: 'DB_PASSWORD'
 
 images:
-  - 'gcr.io/$PROJECT_ID/synchub-backend' 
+  - 'gcr.io/$PROJECT_ID/synchub-backend:$COMMIT_SHA' 

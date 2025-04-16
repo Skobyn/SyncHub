@@ -16,7 +16,7 @@ This file tracks the development tasks for the project.
 - [x] Choose and set up Hub frontend framework/language (Next.js/React/TypeScript).
 - [ ] Choose and set up Agent language/runtime (e.g., Go).
 - [x] Design and implement initial database schema (e.g., PostgreSQL) including core tables for `Users`, `Retailers`, `Agents`, `Destinations`, `Jobs`. Ensure multi-tenancy (`retailer_id`).
-- [ ] Set up basic CI/CD pipeline placeholder.
+- [x] Set up basic CI/CD pipeline placeholder.
 
 ### Central Hub - Backend API & Core Logic
 - [/] Implement authentication and core API endpoints for Users, Retailers, Agents, Destinations, and Jobs, enforcing RBAC and multi-tenancy as per PRD.
@@ -98,3 +98,5 @@ This file tracks the development tasks for the project.
 - [x] Choose and set up Hub frontend framework/language (Next.js/React/TypeScript).
 - [x] Design and implement initial database schema (e.g., PostgreSQL) including core tables for `Users`, `Retailers`, `Agents`, `Destinations`, `Jobs`. Ensure multi-tenancy (`retailer_id`).
 - [x] Enable CORS in backend for frontend integration (local development).
+- [x] Initial Cloud Run deployment (fix: added gunicorn to requirements.txt)
+- [ ] Verify Cloud Run service functionality and access logs.
