@@ -1,6 +1,6 @@
 import type { AppProps } from 'next/app';
 import { SessionProvider } from 'next-auth/react';
-import '@/styles/globals.css'; // Use path alias assuming styles is under src or root
+import '../styles/globals.css'; // Use relative path from pages directory
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
