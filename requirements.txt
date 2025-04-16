@@ -1,2 +1,3 @@
 django-storages
 google-cloud-storage 
+gunicorn 
