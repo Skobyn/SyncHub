@@ -1,22 +1,8 @@
-import NextAuth, { NextAuthOptions, Profile, Account, User } from 'next-auth';
+import NextAuth, { NextAuthOptions, Account, User, Session } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 
 // Define your backend API URL (ensure this is set in your environment)
 const BACKEND_API_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://synchub-cloudrun-834454980092.us-central1.run.app/api';
-
-// Define an interface for the expected backend token response
-interface BackendTokenResponse {
-  access_token: string; // Or 'key', 'token' depending on dj-rest-auth setup
-  refresh_token?: string;
-  user: {
-    pk: number; // Or 'id'
-    username: string;
-    email: string;
-    first_name: string;
-    last_name: string;
-    role?: string; // Add if you have a role field in your User serializer
-  };
-}
 
 // Define an interface for the user object we'll use internally
 interface CustomUser extends User {
@@ -61,7 +47,13 @@ export const authOptions: NextAuthOptions = {
               // context contains tokens.access_token received from the provider/backend
               // We need the token obtained *after* the backend login flow
               const token = context.tokens.access_token; // Adjust if token is named differently
-              const response = await fetch(context.provider.userinfo?.url as URL, {
+              const url = typeof context.provider.userinfo === 'string'
+                ? context.provider.userinfo
+                : context.provider.userinfo?.url;
+              if (!url) {
+                throw new Error('Userinfo URL is undefined');
+              }
+              const response = await fetch(url, {
                   headers: {
                       // Use 'Token' prefix as dj-rest-auth uses DRF TokenAuthentication by default
                       'Authorization': `Token ${token}`,
@@ -76,15 +68,20 @@ export const authOptions: NextAuthOptions = {
       },
 
       // Map the response from your backend's userinfo endpoint to the next-auth user object
-      profile(profile: any, tokens: any): CustomUser {
-          // 'profile' is the JSON returned by your backend's /api/auth/user/ endpoint
-          // 'tokens' might contain the backend token if available here
+      profile(profile: Record<string, unknown>): CustomUser {
+          const p = profile as {
+            pk: number | string;
+            username?: string;
+            first_name?: string;
+            last_name?: string;
+            email?: string;
+            role?: string;
+          };
           return {
-              id: profile.pk.toString(), // Use 'pk' or 'id' based on your UserSerializer
-              name: profile.username || `${profile.first_name} ${profile.last_name}`,
-              email: profile.email,
-              role: profile.role, // Add role if available
-              // We capture the actual backend token in the JWT callback using the 'account' object
+              id: p.pk.toString(),
+              name: p.username || `${p.first_name ?? ""} ${p.last_name ?? ""}`.trim(),
+              email: p.email,
+              role: p.role,
           };
       },
 
@@ -127,11 +124,11 @@ export const authOptions: NextAuthOptions = {
     },
 
     // This callback makes the token and user info available to the client-side session
-    async session({ session, token }: { session: any; token: JWT }): Promise<any> {
+    async session({ session, token }: { session: Session; token: JWT }): Promise<Session> {
       // console.log("Session Callback:", { session, token }); // Debugging
-      session.accessToken = token.accessToken; // Pass the backend DRF token
-      session.user.id = token.userId;
-      session.user.role = token.role;
+      (session as Session & { accessToken?: string }).accessToken = token.accessToken as string | undefined;
+      (session.user as CustomUser).id = typeof token.userId === 'string' ? token.userId : '';
+      (session.user as CustomUser).role = token.role as string | undefined;
       // Keep default user fields (name, email, image) managed by next-auth if needed
       // session.user.name = token.name;
       // session.user.email = token.email;

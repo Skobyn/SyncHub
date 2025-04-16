@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession, getSession } from 'next-auth/react';
 import apiClient from '../lib/apiClient'; // Import the configured Axios instance
 
 // Define an interface for the retailer data expected from the API
@@ -11,7 +11,7 @@ interface Retailer {
 }
 
 export default function RetailerList() {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const [retailers, setRetailers] = useState<Retailer[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -23,11 +23,19 @@ export default function RetailerList() {
         setIsLoading(true);
         setError(null);
         try {
+          const session = await getSession();
+          if (session?.accessToken) {
+            apiClient.defaults.headers.common['Authorization'] = `Token ${session.accessToken}`;
+          }
           const response = await apiClient.get<Retailer[]>('/retailers/');
           setRetailers(response.data);
-        } catch (err: any) {
+        } catch (err: unknown) {
           console.error("Error fetching retailers:", err);
-          setError(err.message || 'Failed to fetch retailers.');
+          if (err instanceof Error) {
+            setError(err.message);
+          } else {
+            setError('Failed to fetch retailers.');
+          }
           // The interceptor in apiClient might handle 401/403 automatically
         } finally {
           setIsLoading(false);
