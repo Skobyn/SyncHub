@@ -6,9 +6,14 @@ ENV PYTHONUNBUFFERED 1
 
 WORKDIR /app
 
-COPY requirements.txt .
+# Install dependencies first (layer caching)
+COPY hub-backend/requirements.txt ./requirements.txt
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-COPY . .
+# Copy backend source code into the image
+COPY hub-backend/ ./
 
-CMD gunicorn hub_backend.wsgi:application --bind 0.0.0.0:$PORT 
+# Expose port 8080 (Cloud Run default)
+ENV PORT 8080
+
+CMD gunicorn hub_backend.wsgi:application --bind 0.0.0.0:${PORT} 
