@@ -26,7 +26,7 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     // This callback is crucial for capturing the token returned by your backend
-    async jwt({ token, user, account }: { token: JWT; user?: CustomUser | User; account?: Account | null }): Promise<JWT> {
+    async jwt({ token, account }: { token: JWT; account?: Account | null }): Promise<JWT> {
       // console.log("JWT Callback:", { token, user, account }); // Debugging
 
       // 'account' contains info from the OAuth provider (our backend wrapper) after successful sign-in
