@@ -21,13 +21,16 @@
 - **Backend initially deployed successfully to Cloud Run.**
 - **Successfully removed large file from Git history using `filter-branch`.**
 - **Corrected `globals.css` import path in frontend.**
+- **Frontend ESLint/type errors resolved; Next.js 15 build now succeeds locally and on Vercel.**
+- **Switched to built‑in Google provider in NextAuth; sign‑in button wired to `signIn('google')`.**
+- **Added global SessionProvider via `Providers` component in app layout.**
+- **Created `components/*` path alias in tsconfig for cleaner imports.**
+- **Dockerfile fixed to copy backend source and expose port; requirements updated with `django`, `djangorestframework`, `gunicorn`.**
 
 ## What's Left
-- Implement authentication and core API endpoints for Users, Retailers, Agents, Destinations, and Jobs, enforcing RBAC and multi-tenancy as per PRD.
-- Verify Cloud Run service functionality and monitor logs.
-- Update documentation and commit changes.
-- Begin frontend setup.
-- Implement features as per task list (authentication, RBAC, agent API, CRUD, plugin system, etc.).
+- Implement `/api/auth/google/` endpoint in Django (dj‑rest‑auth social login) to exchange Google `access_token` for DRF token.
+- Rebuild and redeploy backend; verify Cloud Run starts and returns 200 for health.
+- Verify end‑to‑end Google sign‑in flow (frontend → Google → backend token exchange).
 
 ## Overall Status
 - Project setup, backend initialization, and core models complete. DRF and API structure in place. 
@@ -36,5 +39,6 @@
 - Ready to begin authentication and API development (per PRD requirements).
 
 ## Known Issues
+- Cloud Run revision still fails until backend requirements are installed and `/auth/google/` implemented.
 - None at this stage.
 - **Frontend build fails on Vercel due to ESLint errors (unused vars, explicit any types) in `pages/api/auth/[...nextauth].ts` and `components/RetailerList.tsx`.** 

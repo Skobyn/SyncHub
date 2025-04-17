@@ -18,8 +18,7 @@ export default function AuthButton() {
   return (
     <>
       Not signed in <br />
-      {/* Use the ID defined in [...nextauth].ts */}
-      <button onClick={() => signIn('synchub-backend-google')}>Sign in with Google</button>
+      <button onClick={() => signIn('google')}>Sign in with Google</button>
     </>
   );
 } 

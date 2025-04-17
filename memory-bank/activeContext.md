@@ -1,7 +1,8 @@
 # Active Context: GrocerySync Hub - Support Edition
 
 ## Current Focus
-- Troubleshooting frontend deployment issues on Vercel.
+- Finish backend token-exchange endpoint and get Cloud Run container healthy.
+- Frontend Google sign‑in now uses built‑in provider; build passes.
 - Backend and frontend codebases are structured for cloud deployment (previously on Cloud Run, now aiming for Vercel for frontend).
 - Backend API (Django) is assumed functional, focus is on frontend build/deployment.
 - **Latest deployment attempt failed due to ESLint errors in `pages/api/auth/[...nextauth].ts` and `components/RetailerList.tsx`.**
@@ -28,26 +29,11 @@
 - **Project Memory Bank updated to reflect current status.**
 
 ## Recent Changes
-- Attempted to fix deployment failure caused by a large file (`node_modules/@next/swc-win32-x64-msvc/next-swc.win32-x64-msvc.node`) accidentally committed.
-    - Used `git filter-branch` to remove the file from the entire Git history.
-    - Force-pushed the rewritten history to the remote `main` branch.
-- Attempted to fix deployment failure caused by `Module not found: Can't resolve './globals.css'`.
-    - Corrected the import path in `hub-frontend/src/app/layout.tsx` from `"./globals.css"` to `"../../styles/globals.css"`.
-    - Committed and pushed the fix.
-- Created and configured `cloudbuild.yaml` for automated Docker build and Cloud Run deployment (backend previously).
-- Added and referenced all required secrets in Secret Manager (for previous Cloud Run setup).
-- Updated Cloud Run and Cloud Build service accounts with Secret Manager access (for previous Cloud Run setup).
-- Hardcoded all non-secret environment variables in the deployment pipeline (for previous Cloud Run setup).
-- Verified Cloud SQL and GCS integration (for previous Cloud Run setup).
-- Pushed all changes to GitHub for automated deployment.
-- Python virtual environment created in hub-backend/.
-- Django, Django REST Framework, and psycopg2-binary installed.
-- Django project (hub_backend) and app (core) created.
-- Documentation updated (hub-backend/README.md, root README.md).
-- Initial models and migrations complete.
-- Migrations created and applied.
-- Created `cloudbuild.yaml` for Docker build and Cloud Run deployment.
-- Added `gunicorn` to `requirements.txt` to fix deployment.
+- Switched NextAuth provider to built‑in GoogleProvider; added backend token exchange in JWT callback.
+- Added components path alias; added global SessionProvider via Providers client component.
+- Fixed tsconfig and import paths; login page now shows Google sign‑in.
+- Updated Dockerfile and backend requirements with Django, DRF, gunicorn.
+- Cloud Run deployment still failing but now due to gunicorn missing earlier – fixed; waiting for new build.
 
 ## Immediate Next Steps
 - **Address the ESLint errors reported by the Vercel build process in `pages/api/auth/[...nextauth].ts` and `components/RetailerList.tsx`.**

@@ -18,7 +18,7 @@ steps:
         '--task-timeout', '5m',
         '--region', 'us-central1',
         '--set-env-vars',
-        'DJANGO_SECRET_KEY=$(DJANGO_SECRET_KEY),GOOGLE_CLIENT_ID=$(GOOGLE_CLIENT_ID),GOOGLE_CLIENT_SECRET=$(GOOGLE_CLIENT_SECRET),DB_NAME=postgres,DB_USER=postgres,DB_PASSWORD=$(DB_PASSWORD),DB_HOST=/cloudsql/synchub-456918:us-central1:synchubsql,DB_PORT=5432,DJANGO_ALLOWED_HOSTS=synchub-cloudrun-834454980092.us-central1.run.app,USE_GCS=True,GS_BUCKET_NAME=synchub-bucket,GS_STATIC_BUCKET_NAME=synchub-bucket',
+        'DJANGO_SECRET_KEY=$(DJANGO_SECRET_KEY),GOOGLE_CLIENT_ID=$(GOOGLE_CLIENT_ID),GOOGLE_CLIENT_SECRET=$(GOOGLE_CLIENT_SECRET),DB_NAME=postgres,DB_USER=postgres,DB_PASSWORD=$(DB_PASSWORD),DB_HOST=/cloudsql/synchub-456918:us-central1:synchubsql,DB_PORT=5432,DJANGO_ALLOWED_HOSTS=synchub-cloudrun-834454980092.us-central1.run.app\,sync-hub-theta.vercel.app, USE_GCS=True,GS_BUCKET_NAME=synchub-bucket,GS_STATIC_BUCKET_NAME=synchub-bucket',
         '--command', 'python',
         '--args', 'manage.py,migrate,--noinput',
         '--wait'
@@ -38,7 +38,7 @@ steps:
         '--add-cloudsql-instances', 'synchub-456918:us-central1:synchubsql',
         '--update-secrets=DJANGO_SECRET_KEY=django_secret_key:latest,GOOGLE_CLIENT_ID=google_client_id:latest,GOOGLE_CLIENT_SECRET=google_client_secret:latest,DB_PASSWORD=db_password:latest',
         '--set-env-vars',
-        'DB_NAME=postgres,DB_USER=postgres,DB_HOST=/cloudsql/synchub-456918:us-central1:synchubsql,DB_PORT=5432,DJANGO_ALLOWED_HOSTS=synchub-cloudrun-834454980092.us-central1.run.app,USE_GCS=True,GS_BUCKET_NAME=synchub-bucket,GS_STATIC_BUCKET_NAME=synchub-bucket'
+        'DB_NAME=postgres,DB_USER=postgres,DB_HOST=/cloudsql/synchub-456918:us-central1:synchubsql,DB_PORT=5432,DJANGO_ALLOWED_HOSTS=synchub-cloudrun-834454980092.us-central1.run.app\,sync-hub-theta.vercel.app,USE_GCS=True,GS_BUCKET_NAME=synchub-bucket,GS_STATIC_BUCKET_NAME=synchub-bucket'
       ]
 
 secrets:
