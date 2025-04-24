@@ -51,4 +51,5 @@ To run the project locally:
    - Navigate to `hub-frontend/` and run `npm run dev`.
    - The frontend will be available at [http://localhost:3000](http://localhost:3000).
 3. **API Communication:**
-   - The Next.js frontend is configured to communicate with the Django backend API (CORS is enabled for local development). 
+   - The Next.js frontend is configured to communicate with the Django backend API (CORS is enabled for local development).
+   - Note: This is a test commit to trigger CI/CD. 
