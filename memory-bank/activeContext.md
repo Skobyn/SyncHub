@@ -34,6 +34,71 @@
 - Fixed tsconfig and import paths; login page now shows Google sign‑in.
 - Updated Dockerfile and backend requirements with Django, DRF, gunicorn.
 - Cloud Run deployment still failing but now due to gunicorn missing earlier – fixed; waiting for new build.
+- Python virtual environment created in hub-backend/.
+- Django, Django REST Framework, and psycopg2-binary installed.
+- Django project (hub_backend) and app (core) created.
+- Documentation updated (hub-backend/README.md, root README.md).
+
+## Customer Export Requirements and Feedback
+The following feedback has been provided regarding data export formats and should be incorporated during the implementation of export functionality:
+
+1. **UPC Formatting**:
+   - Some UPCs are missing check digits. Examples:
+     - 906013642898 → 9060136428988
+     - 964001151357 → 9640011513574
+
+2. **Type 2 UPC Formatting**:
+   - Leading and trailing zeros from type 2 UPCs should be removed
+   - Examples: 00029927300000 and 00029930200000
+
+3. **Field Label Correction**:
+   - "Total sales 30 days" should be "Total Sales 30 Day"
+
+4. **Column Order Requirements**:
+   The headers must be in the following specific order:
+   ```
+   'UPC',
+   'Item Name',
+   'Receipt Alias',
+   'Brand',
+   'Department',
+   'Subdepartment',
+   'Base Price',
+   'Promotion Price',
+   'Promotion Start',
+   'Promotion End',
+   'Volume Qty',
+   'Volume Discount Unit Price',
+   'Volume Discount Start Date',
+   'Volume Discount End Date',
+   'Taxable',
+   'Tax Rate',
+   'Last Sold Date',
+   'Unit',
+   'Size',
+   'Average Weight',
+   'Linked Item Code',
+   'Linked Item Price',
+   'Total Units Sold 1 Day',
+   'Total Units Sold 7 Day',
+   'Total Units Sold 30 Day',
+   'Total Sales 1 Day',
+   'Total Sales 7 Day',
+   'Total Sales 30 Day',
+   'Loyalty Accrual',
+   'Loyalty Price',
+   'On Hand',
+   'Item Location',
+   'Virtual Category',
+   'Pricelist',
+   'Express Category',
+   'Has Modifier',
+   'Ingredients',
+   'Marketing Copy',
+   'Availability Override',
+   'Age Restricted',
+   'EBT Eligible'
+   ```
 
 ## Immediate Next Steps
 - **Address the ESLint errors reported by the Vercel build process in `pages/api/auth/[...nextauth].ts` and `components/RetailerList.tsx`.**
