@@ -93,6 +93,10 @@ DATABASES = {
         "PASSWORD": os.environ.get("DB_PASSWORD"),
         "HOST": os.environ.get("DB_HOST"),
         "PORT": os.environ.get("DB_PORT", "5432"),
+        # Connection pooling - reuse connections for 10 minutes to reduce overhead
+        "CONN_MAX_AGE": 600,
+        # Health checks ensure connections are valid before reuse
+        "CONN_HEALTH_CHECKS": True,
     }
 }
 
