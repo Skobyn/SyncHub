@@ -1,5 +1,8 @@
 django>=5.2
 
+# Database
+psycopg2-binary>=2.9.9
+
 # REST framework and auth
 djangorestframework>=3.15
 
