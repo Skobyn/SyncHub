@@ -7,9 +7,16 @@ psycopg2-binary>=2.9.9
 djangorestframework>=3.15
 
 # dj-rest-auth and allauth
-dj-rest-auth
-django-allauth
+dj-rest-auth[with_social]
+django-allauth[socialaccount]
+requests>=2.31.0
 
+# CORS
 django-cors-headers
 
+# Cloud Storage (for GCS)
+django-storages[google]>=1.14
+google-cloud-storage>=2.10.0
+
+# WSGI Server
 gunicorn>=23.0 
